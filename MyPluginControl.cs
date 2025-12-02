@@ -101,14 +101,6 @@ namespace FieldReferenceFinder
             }
         }
 
-        private void comboBoxTables_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (comboBoxTables.SelectedItem != null)
-            {
-                LoadFields(comboBoxTables.SelectedItem.ToString());
-            }
-        }
-
         private void LoadTables()
         {
             WorkAsync(new WorkAsyncInfo
@@ -761,6 +753,14 @@ namespace FieldReferenceFinder
             if (Service != null && comboBoxTables.Items.Count == 0)
             {
                 LoadTables();
+            }
+        }
+
+        private void comboBoxTables_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            if (comboBoxTables.SelectedItem != null)
+            {
+                LoadFields(comboBoxTables.SelectedItem.ToString());
             }
         }
     }

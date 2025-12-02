@@ -29,38 +29,38 @@
         private void InitializeComponent()
         {
             this.toolStripMenu = new System.Windows.Forms.ToolStrip();
+            this.tsbLoadTables = new System.Windows.Forms.ToolStripButton();
             this.tsbSearch = new System.Windows.Forms.ToolStripButton();
             this.tssSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbExport = new System.Windows.Forms.ToolStripButton();
             this.panelMain = new System.Windows.Forms.Panel();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
+            this.groupBoxSearchOptions = new System.Windows.Forms.GroupBox();
+            this.checkBoxViews = new System.Windows.Forms.CheckBox();
+            this.checkBoxForms = new System.Windows.Forms.CheckBox();
+            this.checkBoxCanvasApps = new System.Windows.Forms.CheckBox();
+            this.checkBoxCloudFlows = new System.Windows.Forms.CheckBox();
+            this.checkBoxWorkflows = new System.Windows.Forms.CheckBox();
+            this.checkBoxWebResources = new System.Windows.Forms.CheckBox();
             this.groupBoxFieldSelection = new System.Windows.Forms.GroupBox();
             this.comboBoxFields = new System.Windows.Forms.ComboBox();
             this.labelField = new System.Windows.Forms.Label();
             this.comboBoxTables = new System.Windows.Forms.ComboBox();
             this.labelTable = new System.Windows.Forms.Label();
-            this.groupBoxSearchOptions = new System.Windows.Forms.GroupBox();
-            this.checkBoxCanvasApps = new System.Windows.Forms.CheckBox();
-            this.checkBoxCloudFlows = new System.Windows.Forms.CheckBox();
-            this.checkBoxWorkflows = new System.Windows.Forms.CheckBox();
-            this.checkBoxWebResources = new System.Windows.Forms.CheckBox();
             this.groupBoxResults = new System.Windows.Forms.GroupBox();
             this.dataGridViewResults = new System.Windows.Forms.DataGridView();
             this.ColumnType = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnLocation = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnContext = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tsbLoadTables = new System.Windows.Forms.ToolStripButton();
-            this.checkBoxForms = new System.Windows.Forms.CheckBox();
-            this.checkBoxViews = new System.Windows.Forms.CheckBox();
             this.toolStripMenu.SuspendLayout();
             this.panelMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
             this.splitContainer.SuspendLayout();
-            this.groupBoxFieldSelection.SuspendLayout();
             this.groupBoxSearchOptions.SuspendLayout();
+            this.groupBoxFieldSelection.SuspendLayout();
             this.groupBoxResults.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewResults)).BeginInit();
             this.SuspendLayout();
@@ -75,9 +75,17 @@
             this.tsbExport});
             this.toolStripMenu.Location = new System.Drawing.Point(0, 0);
             this.toolStripMenu.Name = "toolStripMenu";
-            this.toolStripMenu.Size = new System.Drawing.Size(1200, 38);
+            this.toolStripMenu.Size = new System.Drawing.Size(1200, 34);
             this.toolStripMenu.TabIndex = 4;
             this.toolStripMenu.Text = "toolStrip1";
+            // 
+            // tsbLoadTables
+            // 
+            this.tsbLoadTables.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tsbLoadTables.Name = "tsbLoadTables";
+            this.tsbLoadTables.Size = new System.Drawing.Size(108, 29);
+            this.tsbLoadTables.Text = "Load Tables";
+            this.tsbLoadTables.Click += new System.EventHandler(this.tsbLoadTables_Click);
             // 
             // tsbSearch
             // 
@@ -104,9 +112,9 @@
             // 
             this.panelMain.Controls.Add(this.splitContainer);
             this.panelMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelMain.Location = new System.Drawing.Point(0, 38);
+            this.panelMain.Location = new System.Drawing.Point(0, 34);
             this.panelMain.Name = "panelMain";
-            this.panelMain.Size = new System.Drawing.Size(1200, 593);
+            this.panelMain.Size = new System.Drawing.Size(1200, 597);
             this.panelMain.TabIndex = 5;
             // 
             // splitContainer
@@ -124,60 +132,9 @@
             // splitContainer.Panel2
             // 
             this.splitContainer.Panel2.Controls.Add(this.groupBoxResults);
-            this.splitContainer.Size = new System.Drawing.Size(1200, 593);
-            this.splitContainer.SplitterDistance = 197;
+            this.splitContainer.Size = new System.Drawing.Size(1200, 597);
+            this.splitContainer.SplitterDistance = 198;
             this.splitContainer.TabIndex = 0;
-            // 
-            // groupBoxFieldSelection
-            // 
-            this.groupBoxFieldSelection.Controls.Add(this.comboBoxFields);
-            this.groupBoxFieldSelection.Controls.Add(this.labelField);
-            this.groupBoxFieldSelection.Controls.Add(this.comboBoxTables);
-            this.groupBoxFieldSelection.Controls.Add(this.labelTable);
-            this.groupBoxFieldSelection.Dock = System.Windows.Forms.DockStyle.Left;
-            this.groupBoxFieldSelection.Location = new System.Drawing.Point(0, 0);
-            this.groupBoxFieldSelection.Name = "groupBoxFieldSelection";
-            this.groupBoxFieldSelection.Size = new System.Drawing.Size(603, 197);
-            this.groupBoxFieldSelection.TabIndex = 0;
-            this.groupBoxFieldSelection.TabStop = false;
-            this.groupBoxFieldSelection.Text = "Field Selection";
-            // 
-            // comboBoxFields
-            // 
-            this.comboBoxFields.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxFields.FormattingEnabled = true;
-            this.comboBoxFields.Location = new System.Drawing.Point(80, 60);
-            this.comboBoxFields.Name = "comboBoxFields";
-            this.comboBoxFields.Size = new System.Drawing.Size(500, 28);
-            this.comboBoxFields.TabIndex = 3;
-            // 
-            // labelField
-            // 
-            this.labelField.AutoSize = true;
-            this.labelField.Location = new System.Drawing.Point(20, 63);
-            this.labelField.Name = "labelField";
-            this.labelField.Size = new System.Drawing.Size(47, 20);
-            this.labelField.TabIndex = 2;
-            this.labelField.Text = "Field:";
-            // 
-            // comboBoxTables
-            // 
-            this.comboBoxTables.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxTables.FormattingEnabled = true;
-            this.comboBoxTables.Location = new System.Drawing.Point(80, 25);
-            this.comboBoxTables.Name = "comboBoxTables";
-            this.comboBoxTables.Size = new System.Drawing.Size(500, 28);
-            this.comboBoxTables.TabIndex = 1;
-            this.comboBoxTables.SelectedIndexChanged += new System.EventHandler(this.comboBoxTables_SelectedIndexChanged);
-            // 
-            // labelTable
-            // 
-            this.labelTable.AutoSize = true;
-            this.labelTable.Location = new System.Drawing.Point(20, 28);
-            this.labelTable.Name = "labelTable";
-            this.labelTable.Size = new System.Drawing.Size(52, 20);
-            this.labelTable.TabIndex = 0;
-            this.labelTable.Text = "Table:";
             // 
             // groupBoxSearchOptions
             // 
@@ -190,10 +147,34 @@
             this.groupBoxSearchOptions.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBoxSearchOptions.Location = new System.Drawing.Point(603, 0);
             this.groupBoxSearchOptions.Name = "groupBoxSearchOptions";
-            this.groupBoxSearchOptions.Size = new System.Drawing.Size(597, 197);
+            this.groupBoxSearchOptions.Size = new System.Drawing.Size(597, 198);
             this.groupBoxSearchOptions.TabIndex = 1;
             this.groupBoxSearchOptions.TabStop = false;
             this.groupBoxSearchOptions.Text = "Search Options";
+            // 
+            // checkBoxViews
+            // 
+            this.checkBoxViews.AutoSize = true;
+            this.checkBoxViews.Checked = true;
+            this.checkBoxViews.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxViews.Location = new System.Drawing.Point(227, 58);
+            this.checkBoxViews.Name = "checkBoxViews";
+            this.checkBoxViews.Size = new System.Drawing.Size(77, 24);
+            this.checkBoxViews.TabIndex = 5;
+            this.checkBoxViews.Text = "Views";
+            this.checkBoxViews.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxForms
+            // 
+            this.checkBoxForms.AutoSize = true;
+            this.checkBoxForms.Checked = true;
+            this.checkBoxForms.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxForms.Location = new System.Drawing.Point(227, 28);
+            this.checkBoxForms.Name = "checkBoxForms";
+            this.checkBoxForms.Size = new System.Drawing.Size(80, 24);
+            this.checkBoxForms.TabIndex = 4;
+            this.checkBoxForms.Text = "Forms";
+            this.checkBoxForms.UseVisualStyleBackColor = true;
             // 
             // checkBoxCanvasApps
             // 
@@ -243,13 +224,68 @@
             this.checkBoxWebResources.Text = "Web Resources";
             this.checkBoxWebResources.UseVisualStyleBackColor = true;
             // 
+            // groupBoxFieldSelection
+            // 
+            this.groupBoxFieldSelection.Controls.Add(this.comboBoxFields);
+            this.groupBoxFieldSelection.Controls.Add(this.labelField);
+            this.groupBoxFieldSelection.Controls.Add(this.comboBoxTables);
+            this.groupBoxFieldSelection.Controls.Add(this.labelTable);
+            this.groupBoxFieldSelection.Dock = System.Windows.Forms.DockStyle.Left;
+            this.groupBoxFieldSelection.Location = new System.Drawing.Point(0, 0);
+            this.groupBoxFieldSelection.Name = "groupBoxFieldSelection";
+            this.groupBoxFieldSelection.Size = new System.Drawing.Size(603, 198);
+            this.groupBoxFieldSelection.TabIndex = 0;
+            this.groupBoxFieldSelection.TabStop = false;
+            this.groupBoxFieldSelection.Text = "Field Selection";
+            // 
+            // comboBoxFields
+            // 
+            this.comboBoxFields.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.comboBoxFields.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.comboBoxFields.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxFields.FormattingEnabled = true;
+            this.comboBoxFields.Location = new System.Drawing.Point(80, 60);
+            this.comboBoxFields.Name = "comboBoxFields";
+            this.comboBoxFields.Size = new System.Drawing.Size(500, 28);
+            this.comboBoxFields.TabIndex = 3;
+            // 
+            // labelField
+            // 
+            this.labelField.AutoSize = true;
+            this.labelField.Location = new System.Drawing.Point(20, 63);
+            this.labelField.Name = "labelField";
+            this.labelField.Size = new System.Drawing.Size(47, 20);
+            this.labelField.TabIndex = 2;
+            this.labelField.Text = "Field:";
+            // 
+            // comboBoxTables
+            // 
+            this.comboBoxTables.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.comboBoxTables.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.comboBoxTables.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxTables.FormattingEnabled = true;
+            this.comboBoxTables.Location = new System.Drawing.Point(80, 25);
+            this.comboBoxTables.Name = "comboBoxTables";
+            this.comboBoxTables.Size = new System.Drawing.Size(500, 28);
+            this.comboBoxTables.TabIndex = 1;
+            this.comboBoxTables.SelectionChangeCommitted += new System.EventHandler(this.comboBoxTables_SelectionChangeCommitted);
+            // 
+            // labelTable
+            // 
+            this.labelTable.AutoSize = true;
+            this.labelTable.Location = new System.Drawing.Point(20, 28);
+            this.labelTable.Name = "labelTable";
+            this.labelTable.Size = new System.Drawing.Size(52, 20);
+            this.labelTable.TabIndex = 0;
+            this.labelTable.Text = "Table:";
+            // 
             // groupBoxResults
             // 
             this.groupBoxResults.Controls.Add(this.dataGridViewResults);
             this.groupBoxResults.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBoxResults.Location = new System.Drawing.Point(0, 0);
             this.groupBoxResults.Name = "groupBoxResults";
-            this.groupBoxResults.Size = new System.Drawing.Size(1200, 392);
+            this.groupBoxResults.Size = new System.Drawing.Size(1200, 395);
             this.groupBoxResults.TabIndex = 0;
             this.groupBoxResults.TabStop = false;
             this.groupBoxResults.Text = "Search Results";
@@ -269,7 +305,7 @@
             this.dataGridViewResults.Name = "dataGridViewResults";
             this.dataGridViewResults.ReadOnly = true;
             this.dataGridViewResults.RowHeadersWidth = 62;
-            this.dataGridViewResults.Size = new System.Drawing.Size(1194, 367);
+            this.dataGridViewResults.Size = new System.Drawing.Size(1194, 370);
             this.dataGridViewResults.TabIndex = 0;
             // 
             // ColumnType
@@ -304,38 +340,6 @@
             this.ColumnContext.ReadOnly = true;
             this.ColumnContext.Width = 500;
             // 
-            // tsbLoadTables
-            // 
-            this.tsbLoadTables.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.tsbLoadTables.Name = "tsbLoadTables";
-            this.tsbLoadTables.Size = new System.Drawing.Size(108, 29);
-            this.tsbLoadTables.Text = "Load Tables";
-            this.tsbLoadTables.Click += new System.EventHandler(this.tsbLoadTables_Click);
-            // 
-            // checkBoxForms
-            // 
-            this.checkBoxForms.AutoSize = true;
-            this.checkBoxForms.Checked = true;
-            this.checkBoxForms.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxForms.Location = new System.Drawing.Point(227, 28);
-            this.checkBoxForms.Name = "checkBoxForms";
-            this.checkBoxForms.Size = new System.Drawing.Size(80, 24);
-            this.checkBoxForms.TabIndex = 4;
-            this.checkBoxForms.Text = "Forms";
-            this.checkBoxForms.UseVisualStyleBackColor = true;
-            // 
-            // checkBoxViews
-            // 
-            this.checkBoxViews.AutoSize = true;
-            this.checkBoxViews.Checked = true;
-            this.checkBoxViews.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxViews.Location = new System.Drawing.Point(227, 58);
-            this.checkBoxViews.Name = "checkBoxViews";
-            this.checkBoxViews.Size = new System.Drawing.Size(77, 24);
-            this.checkBoxViews.TabIndex = 5;
-            this.checkBoxViews.Text = "Views";
-            this.checkBoxViews.UseVisualStyleBackColor = true;
-            // 
             // MyPluginControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -353,10 +357,10 @@
             this.splitContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
             this.splitContainer.ResumeLayout(false);
-            this.groupBoxFieldSelection.ResumeLayout(false);
-            this.groupBoxFieldSelection.PerformLayout();
             this.groupBoxSearchOptions.ResumeLayout(false);
             this.groupBoxSearchOptions.PerformLayout();
+            this.groupBoxFieldSelection.ResumeLayout(false);
+            this.groupBoxFieldSelection.PerformLayout();
             this.groupBoxResults.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewResults)).EndInit();
             this.ResumeLayout(false);
