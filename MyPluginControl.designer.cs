@@ -40,6 +40,7 @@
             this.comboBoxTables = new System.Windows.Forms.ComboBox();
             this.labelTable = new System.Windows.Forms.Label();
             this.groupBoxSearchOptions = new System.Windows.Forms.GroupBox();
+            this.checkBoxPluginSteps = new System.Windows.Forms.CheckBox();
             this.checkBoxCanvasApps = new System.Windows.Forms.CheckBox();
             this.checkBoxCloudFlows = new System.Windows.Forms.CheckBox();
             this.checkBoxWorkflows = new System.Windows.Forms.CheckBox();
@@ -181,6 +182,7 @@
             // 
             // groupBoxSearchOptions
             // 
+            this.groupBoxSearchOptions.Controls.Add(this.checkBoxPluginSteps);
             this.groupBoxSearchOptions.Controls.Add(this.checkBoxViews);
             this.groupBoxSearchOptions.Controls.Add(this.checkBoxForms);
             this.groupBoxSearchOptions.Controls.Add(this.checkBoxCanvasApps);
@@ -195,6 +197,18 @@
             this.groupBoxSearchOptions.TabStop = false;
             this.groupBoxSearchOptions.Text = "Search Options";
             // 
+            // checkBoxPluginSteps
+            //
+            this.checkBoxPluginSteps.AutoSize = true;
+            this.checkBoxPluginSteps.Checked = true;
+            this.checkBoxPluginSteps.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxPluginSteps.Location = new System.Drawing.Point(227, 88);
+            this.checkBoxPluginSteps.Name = "checkBoxPluginSteps";
+            this.checkBoxPluginSteps.Size = new System.Drawing.Size(192, 24);
+            this.checkBoxPluginSteps.TabIndex = 6;
+            this.checkBoxPluginSteps.Text = "Plug-in Steps / Images";
+            this.checkBoxPluginSteps.UseVisualStyleBackColor = true;
+            //
             // checkBoxCanvasApps
             // 
             this.checkBoxCanvasApps.AutoSize = true;
@@ -377,6 +391,7 @@
         private System.Windows.Forms.ComboBox comboBoxTables;
         private System.Windows.Forms.Label labelTable;
         private System.Windows.Forms.GroupBox groupBoxSearchOptions;
+        private System.Windows.Forms.CheckBox checkBoxPluginSteps;
         private System.Windows.Forms.CheckBox checkBoxCanvasApps;
         private System.Windows.Forms.CheckBox checkBoxCloudFlows;
         private System.Windows.Forms.CheckBox checkBoxWorkflows;

@@ -1,4 +1,4 @@
-An XrmToolbox plugin to help find which components Dataverse fields are used in.
+An XrmToolbox plugin to help find which components reference a given Dataverse field.
 
 <img width="1898" height="1243" alt="image" src="https://github.com/user-attachments/assets/a55a8b60-f217-4a14-9162-47fd17bb8364" />
 
