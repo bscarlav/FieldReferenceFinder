@@ -262,6 +262,11 @@ namespace FieldReferenceFinder
                         results.AddRange(SearchViews(selectedTable, selectedField, worker));
                     }
 
+                    if (checkBoxPluginSteps.Checked)
+                    {
+                        results.AddRange(SearchPluginStepsAndImages(selectedTable, selectedField, worker));
+                    }
+
                     args.Result = results;
                 },
                 PostWorkCallBack = (args) =>
@@ -605,6 +610,96 @@ namespace FieldReferenceFinder
             }
 
             return results;
+        }
+
+        private List<FieldReferenceResult> SearchPluginStepsAndImages(string tableName, string fieldName, BackgroundWorker worker)
+        {
+            var results = new List<FieldReferenceResult>();
+
+            try
+            {
+                var stepQuery = new QueryExpression("sdkmessageprocessingstep")
+                {
+                    ColumnSet = new ColumnSet("name", "filteringattributes")
+                };
+                var messageFilter = stepQuery.AddLink("sdkmessagefilter", "sdkmessagefilterid", "sdkmessagefilterid");
+                messageFilter.LinkCriteria.AddCondition("primaryobjecttypecode", ConditionOperator.Equal, tableName);
+
+                foreach (var step in Service.RetrieveMultiple(stepQuery).Entities)
+                {
+                    var stepName = step.GetAttributeValue<string>("name") ?? step.Id.ToString();
+                    var filteringAttributes = step.GetAttributeValue<string>("filteringattributes");
+                    if (ContainsAttribute(filteringAttributes, fieldName))
+                    {
+                        results.Add(new FieldReferenceResult
+                        {
+                            Id = step.Id,
+                            Type = "Plug-in Step",
+                            Name = stepName,
+                            Location = $"Plug-in Step: {stepName}",
+                            Context = ExtractAttributeListContext(filteringAttributes, fieldName)
+                        });
+                    }
+
+                    var imageQuery = new QueryExpression("sdkmessageprocessingstepimage")
+                    {
+                        ColumnSet = new ColumnSet("name", "entityalias", "imagetype", "attributes")
+                    };
+                    imageQuery.Criteria.AddCondition("sdkmessageprocessingstepid", ConditionOperator.Equal, step.Id);
+
+                    foreach (var image in Service.RetrieveMultiple(imageQuery).Entities)
+                    {
+                        var attributes = image.GetAttributeValue<string>("attributes");
+                        if (!string.IsNullOrWhiteSpace(attributes) && !ContainsAttribute(attributes, fieldName)) continue;
+
+                        var imageName = image.GetAttributeValue<string>("name")
+                            ?? image.GetAttributeValue<string>("entityalias")
+                            ?? image.Id.ToString();
+                        var imageType = GetPluginImageType(image.GetAttributeValue<OptionSetValue>("imagetype"));
+                        results.Add(new FieldReferenceResult
+                        {
+                            Id = image.Id,
+                            Type = $"Plug-in {imageType}",
+                            Name = imageName,
+                            Location = $"Plug-in Step: {stepName} / {imageType}: {imageName}",
+                            Context = string.IsNullOrWhiteSpace(attributes)
+                                ? "Image contains all attributes"
+                                : ExtractAttributeListContext(attributes, fieldName)
+                        });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LogError($"Error searching plug-in steps and images: {ex.Message}");
+            }
+
+            return results;
+        }
+
+        private bool ContainsAttribute(string attributes, string fieldName)
+        {
+            if (string.IsNullOrWhiteSpace(attributes)) return false;
+            return attributes.Split(',')
+                .Select(attribute => attribute.Trim())
+                .Any(attribute => string.Equals(attribute, fieldName, StringComparison.OrdinalIgnoreCase));
+        }
+
+        private string ExtractAttributeListContext(string attributes, string fieldName)
+        {
+            return $"Attribute list contains '{fieldName}': {attributes}";
+        }
+
+        private string GetPluginImageType(OptionSetValue imageType)
+        {
+            if (imageType == null) return "Image";
+            switch (imageType.Value)
+            {
+                case 0: return "Pre Image";
+                case 1: return "Post Image";
+                case 2: return "Pre/Post Image";
+                default: return "Image";
+            }
         }
 
         private string ExtractContext(string content, string searchTerm)
