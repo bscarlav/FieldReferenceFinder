@@ -625,9 +625,25 @@ namespace FieldReferenceFinder
                 var messageFilter = stepQuery.AddLink("sdkmessagefilter", "sdkmessagefilterid", "sdkmessagefilterid");
                 messageFilter.LinkCriteria.AddCondition("primaryobjecttypecode", ConditionOperator.Equal, tableName);
 
+                // Keep steps even when their plug-in type or message metadata is unavailable.
+                var pluginType = stepQuery.AddLink("plugintype", "plugintypeid", "plugintypeid", JoinOperator.LeftOuter);
+                pluginType.EntityAlias = "plugin";
+                pluginType.Columns = new ColumnSet("typename");
+                var message = stepQuery.AddLink("sdkmessage", "sdkmessageid", "sdkmessageid", JoinOperator.LeftOuter);
+                message.EntityAlias = "message";
+                message.Columns = new ColumnSet("name");
+
                 foreach (var step in Service.RetrieveMultiple(stepQuery).Entities)
                 {
-                    var stepName = step.GetAttributeValue<string>("name") ?? step.Id.ToString();
+                    var stepName = step.GetAttributeValue<string>("name");
+                    if (string.IsNullOrWhiteSpace(stepName))
+                    {
+                        var typeName = step.GetAttributeValue<AliasedValue>("plugin.typename")?.Value as string;
+                        var messageName = step.GetAttributeValue<AliasedValue>("message.name")?.Value as string;
+                        var handlerLabel = string.IsNullOrWhiteSpace(typeName) ? "Unnamed handler" : typeName;
+                        var messageLabel = string.IsNullOrWhiteSpace(messageName) ? "Unknown message" : messageName;
+                        stepName = $"{handlerLabel}: {messageLabel} of {tableName} [Step: {step.Id}]";
+                    }
                     var filteringAttributes = step.GetAttributeValue<string>("filteringattributes");
                     if (ContainsAttribute(filteringAttributes, fieldName))
                     {
@@ -652,9 +668,15 @@ namespace FieldReferenceFinder
                         var attributes = image.GetAttributeValue<string>("attributes");
                         if (!string.IsNullOrWhiteSpace(attributes) && !ContainsAttribute(attributes, fieldName)) continue;
 
-                        var imageName = image.GetAttributeValue<string>("name")
-                            ?? image.GetAttributeValue<string>("entityalias")
-                            ?? image.Id.ToString();
+                        var imageName = image.GetAttributeValue<string>("name");
+                        if (string.IsNullOrWhiteSpace(imageName))
+                        {
+                            imageName = image.GetAttributeValue<string>("entityalias");
+                        }
+                        if (string.IsNullOrWhiteSpace(imageName))
+                        {
+                            imageName = $"Unnamed image [{image.Id}]";
+                        }
                         var imageType = GetPluginImageType(image.GetAttributeValue<OptionSetValue>("imagetype"));
                         results.Add(new FieldReferenceResult
                         {
