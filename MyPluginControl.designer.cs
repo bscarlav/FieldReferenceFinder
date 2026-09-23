@@ -272,6 +272,9 @@
             // 
             this.dataGridViewResults.AllowUserToAddRows = false;
             this.dataGridViewResults.AllowUserToDeleteRows = false;
+            this.dataGridViewResults.AllowUserToResizeColumns = true;
+            this.dataGridViewResults.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.None;
+            this.dataGridViewResults.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.dataGridViewResults.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewResults.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ColumnType,

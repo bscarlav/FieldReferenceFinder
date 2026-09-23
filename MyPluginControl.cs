@@ -728,6 +728,9 @@ namespace FieldReferenceFinder
             {
                 dataGridViewResults.Rows.Add(result.Type, result.Name, result.Location, result.Context);
             }
+            // Fit the actual content so long results can be reached with horizontal scrolling.
+            // Leave automatic sizing disabled so users can also adjust individual columns.
+            dataGridViewResults.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
         }
 
         private void ExportToCsv(string fileName)
