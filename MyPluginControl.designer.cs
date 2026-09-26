@@ -32,6 +32,7 @@
             this.tsbSearch = new System.Windows.Forms.ToolStripButton();
             this.tssSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbExport = new System.Windows.Forms.ToolStripButton();
+            this.tsbPluginSettings = new System.Windows.Forms.ToolStripButton();
             this.panelMain = new System.Windows.Forms.Panel();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.groupBoxFieldSelection = new System.Windows.Forms.GroupBox();
@@ -41,6 +42,7 @@
             this.labelTable = new System.Windows.Forms.Label();
             this.groupBoxSearchOptions = new System.Windows.Forms.GroupBox();
             this.checkBoxPluginSteps = new System.Windows.Forms.CheckBox();
+            this.checkBoxPluginCode = new System.Windows.Forms.CheckBox();
             this.checkBoxCanvasApps = new System.Windows.Forms.CheckBox();
             this.checkBoxCloudFlows = new System.Windows.Forms.CheckBox();
             this.checkBoxWorkflows = new System.Windows.Forms.CheckBox();
@@ -74,6 +76,7 @@
             this.tsbSearch,
             this.tssSeparator2,
             this.tsbExport});
+            this.toolStripMenu.Items.Add(this.tsbPluginSettings);
             this.toolStripMenu.Location = new System.Drawing.Point(0, 0);
             this.toolStripMenu.Name = "toolStripMenu";
             this.toolStripMenu.Size = new System.Drawing.Size(1200, 38);
@@ -100,6 +103,11 @@
             this.tsbExport.Size = new System.Drawing.Size(67, 29);
             this.tsbExport.Text = "Export";
             this.tsbExport.Click += new System.EventHandler(this.tsbExport_Click);
+            this.tsbPluginSettings.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tsbPluginSettings.Name = "tsbPluginSettings";
+            this.tsbPluginSettings.Size = new System.Drawing.Size(110, 29);
+            this.tsbPluginSettings.Text = "Settings";
+            this.tsbPluginSettings.Click += new System.EventHandler(this.tsbPluginSettings_Click);
             // 
             // panelMain
             // 
@@ -183,6 +191,7 @@
             // groupBoxSearchOptions
             // 
             this.groupBoxSearchOptions.Controls.Add(this.checkBoxPluginSteps);
+            this.groupBoxSearchOptions.Controls.Add(this.checkBoxPluginCode);
             this.groupBoxSearchOptions.Controls.Add(this.checkBoxViews);
             this.groupBoxSearchOptions.Controls.Add(this.checkBoxForms);
             this.groupBoxSearchOptions.Controls.Add(this.checkBoxCanvasApps);
@@ -208,6 +217,12 @@
             this.checkBoxPluginSteps.TabIndex = 6;
             this.checkBoxPluginSteps.Text = "Plug-in Steps / Images";
             this.checkBoxPluginSteps.UseVisualStyleBackColor = true;
+            this.checkBoxPluginCode.AutoSize = true;
+            this.checkBoxPluginCode.Location = new System.Drawing.Point(227, 118);
+            this.checkBoxPluginCode.Name = "checkBoxPluginCode";
+            this.checkBoxPluginCode.TabIndex = 7;
+            this.checkBoxPluginCode.Text = "Plug-in Code (in memory)";
+            this.checkBoxPluginCode.UseVisualStyleBackColor = true;
             //
             // checkBoxCanvasApps
             // 
@@ -385,6 +400,7 @@
         private System.Windows.Forms.ToolStrip toolStripMenu;
         private System.Windows.Forms.ToolStripButton tsbSearch;
         private System.Windows.Forms.ToolStripButton tsbExport;
+        private System.Windows.Forms.ToolStripButton tsbPluginSettings;
         private System.Windows.Forms.ToolStripSeparator tssSeparator2;
         private System.Windows.Forms.Panel panelMain;
         private System.Windows.Forms.SplitContainer splitContainer;
@@ -395,6 +411,7 @@
         private System.Windows.Forms.Label labelTable;
         private System.Windows.Forms.GroupBox groupBoxSearchOptions;
         private System.Windows.Forms.CheckBox checkBoxPluginSteps;
+        private System.Windows.Forms.CheckBox checkBoxPluginCode;
         private System.Windows.Forms.CheckBox checkBoxCanvasApps;
         private System.Windows.Forms.CheckBox checkBoxCloudFlows;
         private System.Windows.Forms.CheckBox checkBoxWorkflows;

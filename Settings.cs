@@ -14,6 +14,25 @@ namespace FieldReferenceFinder
     /// </remarks>
     public class Settings
     {
+        public const string DefaultPluginCodeExclusionPatterns =
+            "ActivityAnalysisPlugins.*\n" +
+            "ActivityFeeds.*\n" +
+            "CRM.*\n" +
+            "EmailEngagementPlugins.*\n" +
+            "Microsoft.*\n" +
+            "Microsoft.CCaaS\n" +
+            "Microsoft.CDS.*\n" +
+            "Microsoft.Dataverse.*\n" +
+            "Microsoft.Dynamics.*\n" +
+            "Microsoft.Portal.*\n" +
+            "Microsoft.PowerFx.*\n" +
+            "Microsoft.PowerPages.*\n" +
+            "Microsoft.Xrm.*\n" +
+            "MicrosoftPowerAppsModernShellPlatformApiPlugins\n" +
+            "MicrosoftPowerAppsCardsPlugins\n" +
+            "MicrosoftPowerAppsAppFrameworkPlatformFeaturePlugins\n" +
+            "ScheduleCommon.*";
+
         public string LastUsedOrganizationWebappUrl { get; set; }
         public string LastSelectedTable { get; set; }
         public string LastSelectedField { get; set; }
@@ -21,5 +40,6 @@ namespace FieldReferenceFinder
         public bool SearchWorkflows { get; set; } = true;
         public bool SearchCloudFlows { get; set; } = true;
         public bool SearchCanvasApps { get; set; } = true;
+        public string PluginCodeExclusionPatterns { get; set; } = DefaultPluginCodeExclusionPatterns;
     }
 }

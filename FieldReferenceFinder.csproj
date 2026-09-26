@@ -34,6 +34,19 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="netstandard" />
+    <Reference Include="ICSharpCode.Decompiler">
+      <HintPath>packages\ICSharpCode.Decompiler.8.2.0.7535\lib\netstandard2.0\ICSharpCode.Decompiler.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Collections.Immutable">
+      <HintPath>packages\System.Collections.Immutable.6.0.0\lib\netstandard2.0\System.Collections.Immutable.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reflection.Metadata">
+      <HintPath>packages\System.Reflection.Metadata.6.0.0\lib\netstandard2.0\System.Reflection.Metadata.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="McTools.Xrm.Connection, Version=1.2025.7.63, Culture=neutral, PublicKeyToken=96037217801d9658, processorArchitecture=MSIL">
       <HintPath>packages\MscrmTools.Xrm.Connection.1.2025.7.63\lib\net48\McTools.Xrm.Connection.dll</HintPath>
     </Reference>
@@ -249,6 +262,10 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="PluginCodeScanning\ScanReport.cs" />
+    <Compile Include="PluginCodeScanning\MemoryOnlyAssemblyResolver.cs" />
+    <Compile Include="PluginCodeScanning\InMemoryCodeAnalyzer.cs" />
+    <Compile Include="PluginCodeScanning\PluginCodeScanner.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -258,12 +275,30 @@
     <EmbeddedResource Include="MyPluginControl.resx">
       <DependentUpon>MyPluginControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="PluginCodeScanning\ThirdPartyNotices.txt" />
+    <EmbeddedResource Include="packages\System.Collections.Immutable.6.0.0\LICENSE*;packages\System.Collections.Immutable.6.0.0\THIRD-PARTY-NOTICES*">
+      <LogicalName>ThirdPartyNotices.System.Collections.Immutable.6.0.0.%(Filename)%(Extension)</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="packages\System.Reflection.Metadata.6.0.0\LICENSE*;packages\System.Reflection.Metadata.6.0.0\THIRD-PARTY-NOTICES*">
+      <LogicalName>ThirdPartyNotices.System.Reflection.Metadata.6.0.0.%(Filename)%(Extension)</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="packages\System.Memory.4.6.3\LICENSE*;packages\System.Memory.4.6.3\THIRD-PARTY-NOTICES*">
+      <LogicalName>ThirdPartyNotices.System.Memory.4.6.3.%(Filename)%(Extension)</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="packages\System.Buffers.4.6.1\LICENSE*;packages\System.Buffers.4.6.1\THIRD-PARTY-NOTICES*">
+      <LogicalName>ThirdPartyNotices.System.Buffers.4.6.1.%(Filename)%(Extension)</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="packages\System.Runtime.CompilerServices.Unsafe.6.1.2\LICENSE*;packages\System.Runtime.CompilerServices.Unsafe.6.1.2\THIRD-PARTY-NOTICES*">
+      <LogicalName>ThirdPartyNotices.System.Runtime.CompilerServices.Unsafe.6.1.2.%(Filename)%(Extension)</LogicalName>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>IF NOT EXIST Plugins mkdir Plugins
-move /Y $(TargetFileName) Plugins</PostBuildEvent>
-  </PropertyGroup>
+  <Target Name="MergeCodeScannerDependencies" AfterTargets="Build">
+    <Error Condition="!Exists('$(MSBuildProjectDirectory)\packages\ILMerge.3.0.41\tools\net452\ILMerge.exe')" Text="Restore packages.config dependencies before building: ILMerge 3.0.41 is required." />
+    <MakeDir Directories="$(TargetDir)Plugins" />
+    <!-- Explicit inputs: never merge XrmToolBox, Dataverse SDK or other host libraries. -->
+    <Exec WorkingDirectory="$(TargetDir)" Command="&quot;$(MSBuildProjectDirectory)\packages\ILMerge.3.0.41\tools\net452\ILMerge.exe&quot; /target:library /internalize /ndebug /targetplatform:v4 /lib:&quot;$(MSBuildProgramFiles32)\Reference Assemblies\Microsoft\Framework\.NETFramework\$(TargetFrameworkVersion)\Facades&quot; /lib:&quot;$(TargetDir).&quot; /out:&quot;$(TargetDir)Plugins\$(TargetFileName)&quot; &quot;$(TargetPath)&quot; ICSharpCode.Decompiler.dll System.Collections.Immutable.dll System.Reflection.Metadata.dll System.Memory.dll System.Buffers.dll System.Runtime.CompilerServices.Unsafe.dll" />
+  </Target>
   <Import Project="packages\Microsoft.Web.WebView2.1.0.3351.48\build\Microsoft.Web.WebView2.targets" Condition="Exists('packages\Microsoft.Web.WebView2.1.0.3351.48\build\Microsoft.Web.WebView2.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
