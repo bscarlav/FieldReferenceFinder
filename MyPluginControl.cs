@@ -48,6 +48,21 @@ namespace FieldReferenceFinder
                 LogInfo("Settings found and loaded");
             }
 
+            if (string.IsNullOrWhiteSpace(mySettings.PluginCodeExclusionPatterns))
+            {
+                mySettings.PluginCodeExclusionPatterns = Settings.DefaultPluginCodeExclusionPatterns;
+                SettingsManager.Instance.Save(GetType(), mySettings);
+                LogInfo("Default plug-in code exclusion patterns restored.");
+            }
+            else if (!mySettings.PluginCodeExclusionPatterns.Split(new[] { '\r', '\n', ';' }, StringSplitOptions.RemoveEmptyEntries)
+                .Any(pattern => string.Equals(pattern.Trim(), "Microsoft.*", StringComparison.OrdinalIgnoreCase)))
+            {
+                mySettings.PluginCodeExclusionPatterns = mySettings.PluginCodeExclusionPatterns.TrimEnd() +
+                    Environment.NewLine + "Microsoft.*";
+                SettingsManager.Instance.Save(GetType(), mySettings);
+                LogInfo("Added Microsoft.* to plug-in code exclusions.");
+            }
+
             // Load tables when connected
             if (Service != null)
             {
@@ -97,6 +112,60 @@ namespace FieldReferenceFinder
                 catch (Exception ex)
                 {
                     MessageBox.Show($"Error exporting results: {ex.Message}", "Export Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private void tsbPluginSettings_Click(object sender, EventArgs e)
+        {
+            using (var dialog = new Form
+            {
+                Text = "Plug-in Code Scan Settings",
+                StartPosition = FormStartPosition.CenterParent,
+                Width = 520,
+                Height = 420,
+                MinimizeBox = false,
+                MaximizeBox = false
+            })
+            {
+                var label = new System.Windows.Forms.Label
+                {
+                    Text = "Excluded assembly names or wildcard prefixes (one per line):",
+                    Dock = DockStyle.Top,
+                    Height = 30
+                };
+                var patterns = new TextBox
+                {
+                    Multiline = true,
+                    ScrollBars = ScrollBars.Both,
+                    AcceptsReturn = true,
+                    WordWrap = false,
+                    Dock = DockStyle.Fill,
+                    Text = string.IsNullOrWhiteSpace(mySettings.PluginCodeExclusionPatterns)
+                        ? Settings.DefaultPluginCodeExclusionPatterns.Replace("\n", Environment.NewLine)
+                        : mySettings.PluginCodeExclusionPatterns.Replace("\n", Environment.NewLine)
+                };
+                var buttons = new FlowLayoutPanel
+                {
+                    Dock = DockStyle.Bottom,
+                    Height = 42,
+                    FlowDirection = FlowDirection.RightToLeft
+                };
+                var ok = new Button { Text = "OK", DialogResult = DialogResult.OK, Width = 80 };
+                var cancel = new Button { Text = "Cancel", DialogResult = DialogResult.Cancel, Width = 80 };
+                buttons.Controls.Add(ok);
+                buttons.Controls.Add(cancel);
+                dialog.Controls.Add(patterns);
+                dialog.Controls.Add(buttons);
+                dialog.Controls.Add(label);
+                dialog.AcceptButton = ok;
+                dialog.CancelButton = cancel;
+
+                if (dialog.ShowDialog(ParentForm) == DialogResult.OK)
+                {
+                    mySettings.PluginCodeExclusionPatterns = patterns.Text;
+                    SettingsManager.Instance.Save(GetType(), mySettings);
+                    LogInfo("Plug-in code exclusion settings saved.");
                 }
             }
         }
@@ -222,6 +291,7 @@ namespace FieldReferenceFinder
             var selectedTable = comboBoxTables.SelectedItem.ToString();
             var selectedField = comboBoxFields.SelectedItem.ToString();
             var fieldName = $"{selectedTable}.{selectedField}";
+            var scanPluginCode = checkBoxPluginCode.Checked;
 
             searchResults.Clear();
             dataGridViewResults.Rows.Clear();
@@ -267,7 +337,47 @@ namespace FieldReferenceFinder
                         results.AddRange(SearchPluginStepsAndImages(selectedTable, selectedField, worker));
                     }
 
+                    if (scanPluginCode)
+                    {
+                        var report = new PluginCodeScanning.PluginCodeScanner(Service).Scan(
+                            selectedField,
+                            mySettings.PluginCodeExclusionPatterns,
+                            message => worker.ReportProgress(0, message));
+                        foreach (var match in report.Matches)
+                        {
+                            results.Add(new FieldReferenceResult
+                            {
+                                Id = match.AssemblyId,
+                                Type = "Plug-in Code (candidate)",
+                                Name = match.AssemblyName,
+                                Location = match.Member,
+                                Context = $"Field-name match; table '{selectedTable}' not verified: {match.Snippet}"
+                            });
+                        }
+                        foreach (var issue in report.Issues)
+                        {
+                            results.Add(new FieldReferenceResult
+                            {
+                                Id = issue.AssemblyId,
+                                Type = "Plug-in Code (scan issue)",
+                                Name = issue.AssemblyName,
+                                Location = "Assembly analysis",
+                                Context = issue.Reason
+                            });
+                        }
+                        LogInfo($"Plug-in code: {report.AssembliesCompleted}/{report.AssembliesExamined} assemblies completed, " +
+                            $"{report.Matches.Count} candidates, {report.Issues.Count} scan issues. " +
+                            "Literal search only; early-bound properties, dynamic names and external dependencies are not covered.");
+                    }
+
                     args.Result = results;
+                },
+                ProgressChanged = e =>
+                {
+                    if (e.UserState != null)
+                    {
+                        SetWorkingMessage(e.UserState.ToString());
+                    }
                 },
                 PostWorkCallBack = (args) =>
                 {
@@ -625,9 +735,25 @@ namespace FieldReferenceFinder
                 var messageFilter = stepQuery.AddLink("sdkmessagefilter", "sdkmessagefilterid", "sdkmessagefilterid");
                 messageFilter.LinkCriteria.AddCondition("primaryobjecttypecode", ConditionOperator.Equal, tableName);
 
+                // Keep steps even when their plug-in type or message metadata is unavailable.
+                var pluginType = stepQuery.AddLink("plugintype", "plugintypeid", "plugintypeid", JoinOperator.LeftOuter);
+                pluginType.EntityAlias = "plugin";
+                pluginType.Columns = new ColumnSet("typename");
+                var message = stepQuery.AddLink("sdkmessage", "sdkmessageid", "sdkmessageid", JoinOperator.LeftOuter);
+                message.EntityAlias = "message";
+                message.Columns = new ColumnSet("name");
+
                 foreach (var step in Service.RetrieveMultiple(stepQuery).Entities)
                 {
-                    var stepName = step.GetAttributeValue<string>("name") ?? step.Id.ToString();
+                    var stepName = step.GetAttributeValue<string>("name");
+                    if (string.IsNullOrWhiteSpace(stepName))
+                    {
+                        var typeName = step.GetAttributeValue<AliasedValue>("plugin.typename")?.Value as string;
+                        var messageName = step.GetAttributeValue<AliasedValue>("message.name")?.Value as string;
+                        var handlerLabel = string.IsNullOrWhiteSpace(typeName) ? "Unnamed handler" : typeName;
+                        var messageLabel = string.IsNullOrWhiteSpace(messageName) ? "Unknown message" : messageName;
+                        stepName = $"{handlerLabel}: {messageLabel} of {tableName} [Step: {step.Id}]";
+                    }
                     var filteringAttributes = step.GetAttributeValue<string>("filteringattributes");
                     if (ContainsAttribute(filteringAttributes, fieldName))
                     {
@@ -652,9 +778,15 @@ namespace FieldReferenceFinder
                         var attributes = image.GetAttributeValue<string>("attributes");
                         if (!string.IsNullOrWhiteSpace(attributes) && !ContainsAttribute(attributes, fieldName)) continue;
 
-                        var imageName = image.GetAttributeValue<string>("name")
-                            ?? image.GetAttributeValue<string>("entityalias")
-                            ?? image.Id.ToString();
+                        var imageName = image.GetAttributeValue<string>("name");
+                        if (string.IsNullOrWhiteSpace(imageName))
+                        {
+                            imageName = image.GetAttributeValue<string>("entityalias");
+                        }
+                        if (string.IsNullOrWhiteSpace(imageName))
+                        {
+                            imageName = $"Unnamed image [{image.Id}]";
+                        }
                         var imageType = GetPluginImageType(image.GetAttributeValue<OptionSetValue>("imagetype"));
                         results.Add(new FieldReferenceResult
                         {
@@ -728,6 +860,9 @@ namespace FieldReferenceFinder
             {
                 dataGridViewResults.Rows.Add(result.Type, result.Name, result.Location, result.Context);
             }
+            // Fit the actual content so long results can be reached with horizontal scrolling.
+            // Leave automatic sizing disabled so users can also adjust individual columns.
+            dataGridViewResults.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
         }
 
         private void ExportToCsv(string fileName)

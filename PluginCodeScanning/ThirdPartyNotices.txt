@@ -1,0 +1,34 @@
+Third-party software included in FieldReferenceFinder
+
+ICSharpCode.Decompiler 8.2.0.7535 (ILSpy)
+https://github.com/icsharpcode/ILSpy
+Copyright 2011-2023 AlphaSierraPapa and ILSpy Contributors.
+Copyright (c) 2014 Daniel Grunwald.
+Licensed under the MIT License below.
+
+System.Collections.Immutable, System.Reflection.Metadata, System.Memory,
+System.Buffers, System.Runtime.CompilerServices.Unsafe
+Copyright (c) .NET Foundation and Contributors.
+Copyright (c) Microsoft Corporation.
+Licensed under the MIT License below. Additional package notices are embedded
+in this assembly as ThirdPartyNotices resources.
+
+MIT License
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.

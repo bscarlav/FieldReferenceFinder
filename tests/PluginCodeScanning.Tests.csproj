@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net48</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="MergedSmoke/**/*.cs" />
+    <Compile Include="../PluginCodeScanning/*.cs" Link="Scanner/%(Filename)%(Extension)" />
+    <Reference Include="netstandard" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="Microsoft.Xrm.Sdk"><HintPath>../packages/Microsoft.CrmSdk.CoreAssemblies.9.0.2.59/lib/net462/Microsoft.Xrm.Sdk.dll</HintPath></Reference>
+    <Reference Include="ICSharpCode.Decompiler"><HintPath>../packages/ICSharpCode.Decompiler.8.2.0.7535/lib/netstandard2.0/ICSharpCode.Decompiler.dll</HintPath></Reference>
+    <Reference Include="System.Collections.Immutable"><HintPath>../packages/System.Collections.Immutable.6.0.0/lib/netstandard2.0/System.Collections.Immutable.dll</HintPath></Reference>
+    <Reference Include="System.Reflection.Metadata"><HintPath>../packages/System.Reflection.Metadata.6.0.0/lib/netstandard2.0/System.Reflection.Metadata.dll</HintPath></Reference>
+    <Reference Include="System.Memory"><HintPath>../packages/System.Memory.4.6.3/lib/net462/System.Memory.dll</HintPath></Reference>
+    <Reference Include="System.Buffers"><HintPath>../packages/System.Buffers.4.6.1/lib/net462/System.Buffers.dll</HintPath></Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe"><HintPath>../packages/System.Runtime.CompilerServices.Unsafe.6.1.2/lib/net462/System.Runtime.CompilerServices.Unsafe.dll</HintPath></Reference>
+  </ItemGroup>
+</Project>
